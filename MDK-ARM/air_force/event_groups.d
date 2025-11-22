@@ -1,0 +1,15 @@
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/event_groups.c
+air_force\event_groups.o: E:\MDK528\ARM\ARMCC\Bin\..\include\stdlib.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+air_force\event_groups.o: E:\MDK528\ARM\ARMCC\Bin\..\include\stddef.h
+air_force\event_groups.o: E:\MDK528\ARM\ARMCC\Bin\..\include\stdint.h
+air_force\event_groups.o: ../Core/Inc/FreeRTOSConfig.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+air_force\event_groups.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h

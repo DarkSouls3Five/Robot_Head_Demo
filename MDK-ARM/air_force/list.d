@@ -1,0 +1,12 @@
+air_force\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/list.c
+air_force\list.o: E:\MDK528\ARM\ARMCC\Bin\..\include\stdlib.h
+air_force\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+air_force\list.o: E:\MDK528\ARM\ARMCC\Bin\..\include\stddef.h
+air_force\list.o: E:\MDK528\ARM\ARMCC\Bin\..\include\stdint.h
+air_force\list.o: ../Core/Inc/FreeRTOSConfig.h
+air_force\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+air_force\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+air_force\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+air_force\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+air_force\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+air_force\list.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
