@@ -3,7 +3,7 @@
 <title>Static Call Graph - [air_force\air_force.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image air_force\air_force.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Nov 22 21:49:42 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sun Nov 23 13:53:33 2025
 <BR><P>
 <H3>Maximum Stack Usage =        408 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -2729,9 +2729,9 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[19f]"></a>_dadd</STRONG> (Thumb, 332 bytes, Stack size 16 bytes, daddsub_clz.o(x$fpl$dadd), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dsub1
-<LI><a href="#[1a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dretinf
+<BR><BR>[Calls]<UL><LI><a href="#[1a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dretinf
 <LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dnaninf
+<LI><a href="#[1a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dsub1
 </UL>
 
 <P><STRONG><a name="[1a6]"></a>__fpl_dcmp_Inf</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, dcmpi.o(x$fpl$dcmpinf), UNUSED)
@@ -2795,8 +2795,8 @@ Global Symbols
 <P><STRONG><a name="[1e9]"></a>__aeabi_cdcmple</STRONG> (Thumb, 0 bytes, Stack size 32 bytes, dleqf.o(x$fpl$dleqf), UNUSED)
 
 <P><STRONG><a name="[1a5]"></a>_dcmple</STRONG> (Thumb, 120 bytes, Stack size 32 bytes, dleqf.o(x$fpl$dleqf), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dcmp_Inf
-<LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dnaninf
+<BR><BR>[Calls]<UL><LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dnaninf
+<LI><a href="#[1a6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dcmp_Inf
 </UL>
 
 <P><STRONG><a name="[1a9]"></a>__fpl_dcmple_InfNaN</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, dleqf.o(x$fpl$dleqf), UNUSED)
@@ -2829,7 +2829,8 @@ Global Symbols
 <P><STRONG><a name="[19e]"></a>__fpl_dnaninf</STRONG> (Thumb, 156 bytes, Stack size 16 bytes, dnaninf.o(x$fpl$dnaninf))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = __fpl_dnaninf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[1a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dmul
+<BR>[Called By]<UL><LI><a href="#[1a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dcmple
+<LI><a href="#[1a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dmul
 <LI><a href="#[1a4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dfixu
 <LI><a href="#[1a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_ddiv
 <LI><a href="#[1ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dsub
@@ -2837,7 +2838,6 @@ Global Symbols
 <LI><a href="#[19c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_d2f
 <LI><a href="#[18f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dsqrt
 <LI><a href="#[1a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dfix
-<LI><a href="#[1a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dcmple
 </UL>
 
 <P><STRONG><a name="[1a1]"></a>__fpl_dretinf</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, dretinf.o(x$fpl$dretinf), UNUSED)
@@ -2895,8 +2895,8 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[1ac]"></a>_dsub</STRONG> (Thumb, 464 bytes, Stack size 32 bytes, daddsub_clz.o(x$fpl$dsub), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[1ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dadd1
-<LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dnaninf
+<BR><BR>[Calls]<UL><LI><a href="#[19e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__fpl_dnaninf
+<LI><a href="#[1ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_dadd1
 </UL>
 
 <P><STRONG><a name="[15e]"></a>__aeabi_f2d</STRONG> (Thumb, 0 bytes, Stack size 16 bytes, f2d.o(x$fpl$f2d))

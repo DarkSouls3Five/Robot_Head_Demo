@@ -12,8 +12,8 @@
 #define MID_PIT_ANGLE -51.3f
 
 //╫г╤хоч╥Ы
-#define MAX_YAW_ANGLE 3.57f
-#define MIN_YAW_ANGLE 0.77f
+#define MAX_YAW_ANGLE MID_YAW_ANGLE+1.4f
+#define MIN_YAW_ANGLE MID_YAW_ANGLE-1.4f
 
 
 #define MIN_PIT_ANGLE -85.0f
