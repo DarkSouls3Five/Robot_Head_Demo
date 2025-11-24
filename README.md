@@ -17,6 +17,7 @@ The outline of this demo code:
 ```
 The outline of this demo code:
 
+```
 |——FreeRTOS
       |——ins_task
       |——led_task
@@ -25,4 +26,4 @@ The outline of this demo code:
       |——PS2_task
       |——move_task
       |——mode_set_task
-
+```
