@@ -25,6 +25,7 @@ extern Ps2_s ps2;//引用遥控器数据
 static void mode_init(head_mode_t *head_mode_init);
 extern Ps2_s ps2;//引用遥控器数据
 
+extern int rst_flag;//外部引用复位完成标识
 
 
 /**
@@ -122,32 +123,60 @@ static void mode_set(head_mode_t *head_mode_set)
         return;
     }
 
-		//自由模式下ps手柄按下start持续1s，进入工作模式
+		
 		if(ps2.mode != 115)
 		{
 			head_mode_set->head_mode = MODE_FREE;
 		}
 		else
 		{
+			//自由模式下ps手柄按下start持续1s，进入工作模式
 			if(head_mode_set->head_mode == MODE_FREE && ps2.button[3] == 1)
 			{
 				vTaskDelay(1000);		
+				
 				if(ps2.button[3] == 1)	
-				{
 					head_mode_set->head_mode = MODE_WORK;
+			}
+			//自由模式下ps手柄按下■持续1s，执行Pitch轴复位
+			else if(head_mode_set->head_mode == MODE_FREE && ps2.button[15] == 1)
+			{
+				vTaskDelay(1000);		
+				
+				if(ps2.button[15] == 1)	
+				{
+					head_mode_set->head_mode = MODE_PIT_RST;
+					
+					//复位标志清零
+					rst_flag = 0;
 				}
 			}
 			
-			//工作模式下ps手柄按下select持续0.5s，进入自由模式
-			if(head_mode_set->head_mode == MODE_WORK && ps2.button[0] == 1)
+			//自由模式下ps手柄按下L1持续1s，进入SLAM建图模式
+			else if(head_mode_set->head_mode == MODE_FREE && ps2.button[10] == 1)
 			{
-				vTaskDelay(500);		
-				if(ps2.button[0] == 1)	
+				vTaskDelay(1000);		
+				
+				if(ps2.button[10] == 1)	
 				{
-					head_mode_set->head_mode = MODE_FREE;
+					head_mode_set->head_mode = MODE_SLAM;
+					
+					//复位标志清零
+					rst_flag = 0;					
 				}
+			}			
+		}
+			
+		//非自由模式下ps手柄按下select持续0.5s，进入自由模式
+		if(head_mode_set->head_mode != MODE_FREE && ps2.button[0] == 1)
+		{
+			vTaskDelay(500);		
+			if(ps2.button[0] == 1)	
+			{
+				head_mode_set->head_mode = MODE_FREE;
 			}
 		}
+		
 }
 
 

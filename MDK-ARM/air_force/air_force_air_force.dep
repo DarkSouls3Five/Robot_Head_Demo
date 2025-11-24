@@ -1161,7 +1161,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x62D39048)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x62D39048)
 I (../Core/Inc/tim.h)(0x690AFBCB)
 I (../bsp/bsp_led.h)(0x61063AF8)
-I (..\application\mode_set_task.h)(0x6916F6BD)
+I (..\application\mode_set_task.h)(0x69240E2F)
 I (../algorithm/pid.h)(0x690D9878)
 F (..\application\calibrate_task.c)(0x690AFEA6)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../application -I ../bsp -I ../module -I ../algorithm -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_air_force-IE:\MDK528\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IE:\MDK528\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o air_force\calibrate_task.o --omf_browse air_force\calibrate_task.crf --depend air_force\calibrate_task.d)
 I (..\application\calibrate_task.h)(0x662E6BC0)
@@ -1222,7 +1222,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x62D39048
 I (../module/ps2_typedef.h)(0x6908A421)
 I (../module/attribute_typedef.h)(0x6908A813)
 I (E:\MDK528\ARM\ARMCC\include\stdbool.h)(0x5CEB79DE)
-F (..\application\buzzer_task.c)(0x6921BF73)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../application -I ../bsp -I ../module -I ../algorithm -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_air_force-IE:\MDK528\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IE:\MDK528\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o air_force\buzzer_task.o --omf_browse air_force\buzzer_task.crf --depend air_force\buzzer_task.d)
+F (..\application\buzzer_task.c)(0x69240F22)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../application -I ../bsp -I ../module -I ../algorithm -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_air_force-IE:\MDK528\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IE:\MDK528\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o air_force\buzzer_task.o --omf_browse air_force\buzzer_task.crf --depend air_force\buzzer_task.d)
 I (..\application\buzzer_task.h)(0x662E6BC0)
 I (../Core/Inc/main.h)(0x690AF773)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x62D39094)
@@ -1278,7 +1278,7 @@ I (../module/struct_typedef.h)(0x662E6BC0)
 I (..\application\gimbal_task.h)(0x690B04E2)
 I (../algorithm/pid.h)(0x690D9878)
 I (../module/can_task.h)(0x69158CF8)
-I (..\application\mode_set_task.h)(0x6916F6BD)
+I (..\application\mode_set_task.h)(0x69240E2F)
 F (..\application\PS2_task.c)(0x690B1E1E)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../application -I ../bsp -I ../module -I ../algorithm -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_air_force-IE:\MDK528\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IE:\MDK528\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o air_force\ps2_task.o --omf_browse air_force\ps2_task.crf --depend air_force\ps2_task.d)
 I (..\application\ps2_task.h)(0x6908A83E)
 I (E:\MDK528\ARM\ARMCC\include\stdbool.h)(0x5CEB79DE)
@@ -1335,8 +1335,8 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x62D39048
 I (..\application\ps2.h)(0x6908A83D)
 I (../module/ps2_typedef.h)(0x6908A421)
 I (../module/attribute_typedef.h)(0x6908A813)
-F (..\application\move_task.c)(0x691EE091)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../application -I ../bsp -I ../module -I ../algorithm -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_air_force-IE:\MDK528\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IE:\MDK528\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o air_force\move_task.o --omf_browse air_force\move_task.crf --depend air_force\move_task.d)
-I (..\application\move_task.h)(0x6922A157)
+F (..\application\move_task.c)(0x69242BDB)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../application -I ../bsp -I ../module -I ../algorithm -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_air_force-IE:\MDK528\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IE:\MDK528\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o air_force\move_task.o --omf_browse air_force\move_task.crf --depend air_force\move_task.d)
+I (..\application\move_task.h)(0x69242B79)
 I (../algorithm/pid.h)(0x690D9878)
 I (../module/struct_typedef.h)(0x662E6BC0)
 I (../module/can_task.h)(0x69158CF8)
@@ -1396,9 +1396,9 @@ I (..\application\ins_task.h)(0x690D9730)
 I (../module/ps2_typedef.h)(0x6908A421)
 I (../module/attribute_typedef.h)(0x6908A813)
 I (E:\MDK528\ARM\ARMCC\include\stdbool.h)(0x5CEB79DE)
-I (..\application\mode_set_task.h)(0x6916F6BD)
+I (..\application\mode_set_task.h)(0x69240E2F)
 I (../Core/Inc/usart.h)(0x690AF772)
-F (..\application\mode_set_task.c)(0x691EBF25)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../application -I ../bsp -I ../module -I ../algorithm -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_air_force-IE:\MDK528\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IE:\MDK528\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o air_force\mode_set_task.o --omf_browse air_force\mode_set_task.crf --depend air_force\mode_set_task.d)
+F (..\application\mode_set_task.c)(0x69240EA7)(--c99 -c --cpu Cortex-M4.fp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include -I ../application -I ../bsp -I ../module -I ../algorithm -I ../Middlewares/Third_Party/FreeRTOS/Source/include -I ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F-I.\RTE\_air_force-IE:\MDK528\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include-IE:\MDK528\Packs\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="528" -D_RTE_ -DSTM32F407xx -DUSE_HAL_DRIVER -DSTM32F407xx-o air_force\mode_set_task.o --omf_browse air_force\mode_set_task.crf --depend air_force\mode_set_task.d)
 I (../Core/Inc/main.h)(0x690AF773)
 I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x62D39094)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x690AF773)
@@ -1446,7 +1446,7 @@ I (../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h)(0x62D39048)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h)(0x62D39048)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h)(0x62D39048)
 I (../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h)(0x62D39048)
-I (..\application\mode_set_task.h)(0x6916F6BD)
+I (..\application\mode_set_task.h)(0x69240E2F)
 I (../module/struct_typedef.h)(0x662E6BC0)
 I (../algorithm/pid.h)(0x690D9878)
 I (../module/ps2_typedef.h)(0x6908A421)

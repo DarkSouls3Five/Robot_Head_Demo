@@ -7,6 +7,9 @@
 
 #define PI					3.14159265358979f
 
+//Pit复位速度
+#define PIT_RST_SPEED 500.0f
+
 //电机中值
 #define MID_YAW_ANGLE 2.17f
 #define MID_PIT_ANGLE -51.3f
@@ -24,19 +27,28 @@
 #define PS2_Coef_Pit 0.4f
 
 //M2006 PID
-#define PIT_MOTOR_SPEED_PID_KP 3.0f
-#define PIT_MOTOR_SPEED_PID_KI 0.0f
-#define PIT_MOTOR_SPEED_PID_KD -0.01f
+//速度环
+#define PIT_MOTOR_SPEED_PID_KP 8.0f
+#define PIT_MOTOR_SPEED_PID_KI 0.5f
+#define PIT_MOTOR_SPEED_PID_KD -0.05f
 
-#define PIT_MOTOR_SPEED_PID_MAX_OUT 800.f
-#define PIT_MOTOR_SPEED_PID_MAX_IOUT 200.0f
-
-#define PIT_MOTOR_ANGLE_PID_KP 120.0f
-#define PIT_MOTOR_ANGLE_PID_KI 0.1f
-#define PIT_MOTOR_ANGLE_PID_KD 0.0f
+#define PIT_MOTOR_SPEED_PID_MAX_OUT 6000.f
+#define PIT_MOTOR_SPEED_PID_MAX_IOUT 600.0f
+//位置环
+#define PIT_MOTOR_ANGLE_PID_KP 150.0f
+#define PIT_MOTOR_ANGLE_PID_KI 1.0f
+#define PIT_MOTOR_ANGLE_PID_KD -2.0f
 
 #define PIT_MOTOR_ANGLE_PID_MAX_OUT 5000.0f
 #define PIT_MOTOR_ANGLE_PID_MAX_IOUT 5.0f
+
+//锁死模式
+#define PIT_MOTOR_LOCK_PID_KP 600.0f
+#define PIT_MOTOR_LOCK_PID_KI 5.0f
+#define PIT_MOTOR_LOCK_PID_KD -2.0f
+
+#define PIT_MOTOR_LOCK_PID_MAX_OUT 5000.0f
+#define PIT_MOTOR_LOCK_PID_MAX_IOUT 200.0f
 
 //DM4310 PID
 //MIT模式位置控制pid
@@ -107,7 +119,8 @@ typedef enum{
 	MOVE_MOTOR_ENCONDE, // 电机编码值角度控制
 	MOVE_MOTOR_WAVE,			//电机来回旋转扫描
 	MOVE_MOTOR_SCAN,			//电机同时扫描	
-	MOVE_MOTOR_LOC			//电机声源定位		
+	MOVE_MOTOR_LOC,			//电机声源定位		
+	MOVE_MOTOR_RST				//电机复位
 
 
 } move_motor_mode_e;
@@ -127,6 +140,7 @@ typedef struct
 	
 	//大疆电机pid参数
 	move_PID_t move_angle_pid;
+	move_PID_t move_lock_pid;
 	pid_type_def move_speed_pid;             
 	
 	//达妙电机MIT模式参数

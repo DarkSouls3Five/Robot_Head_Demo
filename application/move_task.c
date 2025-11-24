@@ -23,6 +23,9 @@ move_data_t move_data;
 int scan_t = 0;
 int direction = 1;//运动方向
 
+//复位完成标志
+int rst_flag = 0;
+
 void fn_move_motor_init(void);// 头部电机初始化
 void fn_moveInit(void);// 头部数据初始化
 void fn_moveMode(void);// 头部模式选择
@@ -35,7 +38,7 @@ void fn_MoveControl(void);// 计算头部电机电流
 static void move_PID_init(move_PID_t *pid, fp32 maxout, fp32 max_iout, fp32 kp, fp32 ki, fp32 kd);
 static fp32 move_PID_calc(move_PID_t *pid, fp32 get, fp32 set, fp32 error_delta);
 
-// pitch重力前馈补偿
+// pitch重力前馈补偿相关数据
 fp32 pitch_k = -100.0f;
 fp32 pitch_add = 0.0f;
 fp32 filter_pitch_imu[40];
@@ -158,16 +161,16 @@ void move_task(void const *argument)
 			// 计算头部电机电流
 			fn_MoveControl();
 			
-			// 发送电流
-			pitch_add = pitch_k * sin(filtered_avg_pitch_imu);			
+			// 发送Pitch电流
+			pitch_add = pitch_k * sin(filtered_avg_pitch_imu);	//重力前馈		
+			fn_cmd_CAN1GimbalMotor(move_data.pit_motor_data.give_current + pitch_add);	
+			// 发送Yaw电流
 			fn_ctrl_DM_motor(move_data.yaw_motor_data.motor_angle_set,0.0f,move_data.yaw_motor_data.DM_kp,move_data.yaw_motor_data.DM_kd,0.0f);
-			fn_cmd_CAN1GimbalMotor(move_data.pit_motor_data.give_current);			
-			
 
 			
       vTaskDelay(5);		
 			move_data.last_move_mode = move_data.move_mode;
-				cnt40++;		
+			cnt40++;		
 				
 			//imu均值计算数据清零
 			if(cnt40 >= 40)
@@ -203,6 +206,7 @@ void fn_move_motor_init(void)
 		// Pitch 2006初始化
 		init_ecd_record(&gimbal_motor2006_measure);
 		move_PID_init(&move_data.pit_motor_data.move_angle_pid, PIT_MOTOR_ANGLE_PID_MAX_OUT, PIT_MOTOR_ANGLE_PID_MAX_IOUT, PIT_MOTOR_ANGLE_PID_KP, PIT_MOTOR_ANGLE_PID_KI, PIT_MOTOR_ANGLE_PID_KD);
+		move_PID_init(&move_data.pit_motor_data.move_lock_pid, PIT_MOTOR_LOCK_PID_MAX_OUT, PIT_MOTOR_LOCK_PID_MAX_IOUT, PIT_MOTOR_LOCK_PID_KP, PIT_MOTOR_LOCK_PID_KI, PIT_MOTOR_LOCK_PID_KD);		
 		PID_init(&move_data.pit_motor_data.move_speed_pid, PID_POSITION, pit_speed_pid, PIT_MOTOR_SPEED_PID_MAX_OUT, PIT_MOTOR_SPEED_PID_MAX_IOUT);		
     fn_move_feedback_update();
 
@@ -224,8 +228,13 @@ void fn_moveMode(void)
 	if(head_mode.head_mode == MODE_FREE)
 		move_data.move_mode = MOVE_FREE;
 	
+	//Pitch轴复位模式或建图模式
+	else if(head_mode.head_mode == MODE_PIT_RST || head_mode.head_mode == MODE_SLAM)
+	{
+		move_data.move_mode = MOVE_WORK;		
+	}
 	//工作模式
-	if(head_mode.head_mode == MODE_WORK)
+	else if(head_mode.head_mode == MODE_WORK)
 	{
 
 		/*********点头动作*************************/
@@ -275,7 +284,7 @@ void fn_moveMode(void)
 		//scan_t归零，说明动作结束
 		else if(scan_t == 0)
 			move_data.move_mode = MOVE_WORK;	
-		//或通过串口收到STOP指令，停止动作	
+		//或通过串口收到STOP指令，停止动作回归work模式	
 		if(mode_uart == 4)
 		{
 			mode_uart = 0;
@@ -302,6 +311,12 @@ void fn_moveMotorMode(void)
     {
         move_data.move_motor_yaw_mode = MOVE_MOTOR_ENCONDE;
         move_data.move_motor_pit_mode = MOVE_MOTOR_ENCONDE;
+			
+			//若为Pit复位或SLAM模式，2006进入复位	
+			if(head_mode.head_mode == MODE_PIT_RST || head_mode.head_mode == MODE_SLAM)
+				{
+					move_data.move_motor_pit_mode = MOVE_MOTOR_RST;					
+				}
 		}	
 		
 		//点头，pitch电机进入扫描模式		
@@ -338,7 +353,7 @@ void fn_move_feedback_update(void)
 		//2006数据更新
 		move_data.pit_motor_data.motor_ecd = move_data.pit_motor_data.move_motor_measure->ecd;//更新电机ecd
 		move_data.pit_motor_data.motor_speed = move_data.pit_motor_data.move_motor_measure->speed_rpm;//更新电机转速
-		move_data.pit_motor_data.motor_angle = move_data.pit_motor_data.move_motor_measure->distance;	//更新电机绝对角度
+		move_data.pit_motor_data.motor_angle = move_data.pit_motor_data.move_motor_measure->distance;	//更新Pitch绝对角度
 	
 		//DM数据
 		move_data.yaw_motor_data.motor_angle = move_data.yaw_motor_data.DM_motor_measure->position; //更新电机角度
@@ -374,6 +389,51 @@ void fn_MoveControl(void)
 	
 			move_data.pit_motor_data.give_current = 0.0f;
 	
+	//复位模式
+	else if(move_data.move_motor_pit_mode == MOVE_MOTOR_RST)
+	{
+		if(rst_flag == 0)
+		//未到极限位置，按目标速度解算Pitch电机电流			
+		{
+			move_data.pit_motor_data.motor_speed_set = PIT_RST_SPEED;
+			move_data.pit_motor_data.give_current = (int16_t)PID_calc(&move_data.pit_motor_data.move_speed_pid, 
+																													move_data.pit_motor_data.motor_speed, move_data.pit_motor_data.motor_speed_set);
+			
+		}
+
+		else if(rst_flag == 1)
+		//已到极限位置，SLAM模式下锁死在当前位置，使用LOCK模式PID			
+		{
+			move_data.pit_motor_data.give_current = move_PID_calc(&move_data.pit_motor_data.move_lock_pid, 
+																																		move_data.pit_motor_data.move_motor_measure->distance, 
+																																		move_data.pit_motor_data.motor_angle_set, 
+																																		move_data.pit_motor_data.motor_speed);			
+		}
+		
+		//电流不断增大，说明已经堵转		
+		if(move_data.pit_motor_data.give_current > 4600 && rst_flag ==0 && INS_eulers[2] > 0.40f)
+		{		
+			rst_flag = 1;				
+			
+			//RST模式下，堵转时说明已到极限位置，重设2006零点
+			if(head_mode.head_mode == MODE_PIT_RST)
+			{			
+				vTaskDelay(500);//延时保证稳定
+				gimbal_motor2006_measure.round = 0;
+				init_ecd_record(&gimbal_motor2006_measure);		
+				
+				//退出复位模式
+				head_mode.head_mode = MODE_FREE;		
+			}
+			
+			//SLAM模式下，堵转时说明已到极限位置，锁死
+			else if(head_mode.head_mode == MODE_SLAM)
+			{
+				vTaskDelay(500);//延时保证稳定
+				move_data.pit_motor_data.motor_angle_set = 	move_data.pit_motor_data.motor_angle;	
+			}
+		}
+	}
 	//遥控器控制模式
 	else if(move_data.move_motor_pit_mode == MOVE_MOTOR_ENCONDE)	
 	{
@@ -397,6 +457,7 @@ void fn_MoveControl(void)
 			}
 
 	}
+	
 	
 	/*****DM4310目标角度设置********************/
 	
@@ -461,7 +522,7 @@ void fn_MoveControl(void)
 			}
 	}
 	
-		/******联合扫描模式******/
+		/******联合扫描模式*************/
     if (move_data.move_mode == MOVE_SCAN_ALL)
 		{
 			scan_t++;			
@@ -503,8 +564,8 @@ void fn_MoveControl(void)
 			}
 		}
 	
-		//解算pitch轴电流
-		if(move_data.move_motor_pit_mode != MOVE_MOTOR_DOWN)
+		//非down和非复位模式下，按目标角度解算pitch轴电流
+		if(move_data.move_motor_pit_mode != MOVE_MOTOR_DOWN && move_data.move_motor_pit_mode != MOVE_MOTOR_RST)
 			move_data.pit_motor_data.give_current = move_PID_calc(&move_data.pit_motor_data.move_angle_pid, 
 																																		move_data.pit_motor_data.move_motor_measure->distance, 
 																																		move_data.pit_motor_data.motor_angle_set, 
