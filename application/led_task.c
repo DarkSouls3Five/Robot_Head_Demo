@@ -32,7 +32,7 @@ void Led_Task(void const * argument)
 
     while(1)
     {
-
+				//工作模式，绿灯闪烁
        if(head_mode.head_mode == MODE_WORK)
 			 {
          alpha = (RGB_flow_color[1] & 0xFF000000) >> 24;
@@ -59,11 +59,69 @@ void Led_Task(void const * argument)
 						osDelay(1);		
 				 }
 			 }
-			else
+			 
+			//SLAM模式，蓝灯闪烁
+			else if(head_mode.head_mode == MODE_SLAM)
+			{
+				 alpha = (RGB_flow_color[1] & 0xFF000000) >> 24;
+				 red = ((RGB_flow_color[1] & 0x00FF0000) >> 16);
+				 green = ((RGB_flow_color[1] & 0x0000FF00) >> 8);
+				 blue = ((RGB_flow_color[1] & 0x000000FF) >> 0);
+				 
+				 delta_alpha = (fp32)((RGB_flow_color[1 + 1] & 0xFF000000) >> 24) - (fp32)((RGB_flow_color[1] & 0xFF000000) >> 24);
+				 delta_red = (fp32)((RGB_flow_color[1 + 1] & 0x00FF0000) >> 16) - (fp32)((RGB_flow_color[1] & 0x00FF0000) >> 16);
+				 delta_green = (fp32)((RGB_flow_color[1 + 1] & 0x0000FF00) >> 8) - (fp32)((RGB_flow_color[1] & 0x0000FF00) >> 8);
+				 delta_blue = (fp32)((RGB_flow_color[1 + 1] & 0x000000FF) >> 0) - (fp32)((RGB_flow_color[1] & 0x000000FF) >> 0);
+
+				 delta_alpha /= RGB_FLOW_ALPHA_CHANGE_TIME;
+				 delta_red /= RGB_FLOW_COLOR_CHANGE_TIME;
+				 delta_green /= RGB_FLOW_COLOR_CHANGE_TIME;
+				 delta_blue /= RGB_FLOW_COLOR_CHANGE_TIME;
+			
+				 for(j = 0; j < RGB_FLOW_ALPHA_CHANGE_TIME; j++)
+				 {
+						alpha += delta_alpha;
+					 
+						aRGB = ((uint32_t)(alpha)) << 24 | ((uint32_t)(0)) << 16 | ((uint32_t)(0)) << 8 | ((uint32_t)(green)) << 0;
+						aRGB_led_show(aRGB);
+						osDelay(1);		
+				 }
+		 }
+			
+		 //陀螺仪模式，红灯闪烁
+			else if(head_mode.head_mode == MODE_GYRO)
+			{
+				 alpha = (RGB_flow_color[1] & 0xFF000000) >> 24;
+				 red = ((RGB_flow_color[1] & 0x00FF0000) >> 16);
+				 green = ((RGB_flow_color[1] & 0x0000FF00) >> 8);
+				 blue = ((RGB_flow_color[1] & 0x000000FF) >> 0);
+				 
+				 delta_alpha = (fp32)((RGB_flow_color[1 + 1] & 0xFF000000) >> 24) - (fp32)((RGB_flow_color[1] & 0xFF000000) >> 24);
+				 delta_red = (fp32)((RGB_flow_color[1 + 1] & 0x00FF0000) >> 16) - (fp32)((RGB_flow_color[1] & 0x00FF0000) >> 16);
+				 delta_green = (fp32)((RGB_flow_color[1 + 1] & 0x0000FF00) >> 8) - (fp32)((RGB_flow_color[1] & 0x0000FF00) >> 8);
+				 delta_blue = (fp32)((RGB_flow_color[1 + 1] & 0x000000FF) >> 0) - (fp32)((RGB_flow_color[1] & 0x000000FF) >> 0);
+
+				 delta_alpha /= RGB_FLOW_ALPHA_CHANGE_TIME;
+				 delta_red /= RGB_FLOW_COLOR_CHANGE_TIME;
+				 delta_green /= RGB_FLOW_COLOR_CHANGE_TIME;
+				 delta_blue /= RGB_FLOW_COLOR_CHANGE_TIME;
+			
+				 for(j = 0; j < RGB_FLOW_ALPHA_CHANGE_TIME; j++)
+				 {
+						alpha += delta_alpha;
+					 
+						aRGB = ((uint32_t)(alpha)) << 24 | ((uint32_t)(green)) << 16 | ((uint32_t)(0)) << 8 | ((uint32_t)(0)) << 0;
+						aRGB_led_show(aRGB);
+						osDelay(1);		
+				 }
+		 }
+			
+			//自由模式，渐变色呼吸灯
+			else if(head_mode.head_mode == MODE_FREE)
 			{
 				for(i = 0; i < RGB_FLOW_COLOR_LENGHT; i++)
         {
-					if(head_mode.head_mode==MODE_WORK)
+					if(head_mode.head_mode != MODE_FREE)
 					//一旦进入工作模式立刻停止流水灯循环，切换为绿灯闪烁指示
 					{
 						continue;
@@ -84,8 +142,8 @@ void Led_Task(void const * argument)
             delta_blue /= RGB_FLOW_COLOR_CHANGE_TIME;
             for(j = 0; j < RGB_FLOW_COLOR_CHANGE_TIME; j++)
             {
-							if(head_mode.head_mode==MODE_WORK)
-							//一旦进入比赛模式立刻停止流水灯循环，切换为绿灯闪烁指示
+							if(head_mode.head_mode != MODE_FREE)
+							//一旦进入工作模式立刻停止流水灯循环，切换为绿灯闪烁指示
 							{
 								continue;
 							}
@@ -98,8 +156,8 @@ void Led_Task(void const * argument)
                 aRGB_led_show(aRGB);
                 osDelay(1);
             }
-        }
-			}
+					}
+				}
     }
 }
 

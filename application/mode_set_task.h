@@ -11,6 +11,7 @@ typedef enum
 {
   MODE_FREE,	//自由模式
 	MODE_WORK,	//工作模式
+	MODE_GYRO,	//陀螺仪模式
 	MODE_PIT_RST,	//Pitch复位	
 	MODE_SLAM	//SLAM模式		
 	

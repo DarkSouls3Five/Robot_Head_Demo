@@ -70,6 +70,10 @@ void mode_set_task(void const * argument)
     //chassis init
     //?????'??
     mode_init(&head_mode);
+		//上电自动复位
+		head_mode.head_mode = MODE_PIT_RST;
+		vTaskDelay(3000);
+
     while(1)
     {
 
@@ -138,6 +142,7 @@ static void mode_set(head_mode_t *head_mode_set)
 				if(ps2.button[3] == 1)	
 					head_mode_set->head_mode = MODE_WORK;
 			}
+			
 			//自由模式下ps手柄按下■持续1s，执行Pitch轴复位
 			else if(head_mode_set->head_mode == MODE_FREE && ps2.button[15] == 1)
 			{
@@ -150,6 +155,14 @@ static void mode_set(head_mode_t *head_mode_set)
 					//复位标志清零
 					rst_flag = 0;
 				}
+			}
+			//自由模式下ps手柄按下R1持续1s，进入陀螺仪模式
+			else if(head_mode_set->head_mode == MODE_FREE && ps2.button[11] == 1)
+			{
+				vTaskDelay(1000);		
+				
+				if(ps2.button[11] == 1)	
+					head_mode_set->head_mode = MODE_GYRO;			
 			}
 			
 			//自由模式下ps手柄按下L1持续1s，进入SLAM建图模式

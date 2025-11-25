@@ -12,7 +12,7 @@
 
 //电机中值
 #define MID_YAW_ANGLE 2.17f
-#define MID_PIT_ANGLE -51.3f
+#define MID_PIT_ANGLE -36.0f
 
 //角度限幅
 #define MAX_YAW_ANGLE MID_YAW_ANGLE+1.4f
@@ -20,11 +20,11 @@
 
 
 #define MIN_PIT_ANGLE -85.0f
-#define MAX_PIT_ANGLE 0.0f
+#define MAX_PIT_ANGLE 5.0f
 
 //PS2遥控器灵敏度系数
-#define PS2_Coef_Yaw 0.01f
-#define PS2_Coef_Pit 0.4f
+#define PS2_Coef_Yaw 0.005f
+#define PS2_Coef_Pit 0.2f
 
 //M2006 PID
 //速度环
@@ -49,6 +49,14 @@
 
 #define PIT_MOTOR_LOCK_PID_MAX_OUT 5000.0f
 #define PIT_MOTOR_LOCK_PID_MAX_IOUT 200.0f
+
+//陀螺仪模式
+#define PIT_MOTOR_GYRO_PID_KP 350.0f//120.0f
+#define PIT_MOTOR_GYRO_PID_KI 0.0f//1.0f
+#define PIT_MOTOR_GYRO_PID_KD -30.0f//-25.0f
+
+#define PIT_MOTOR_GYRO_PID_MAX_OUT 5000.0f
+#define PIT_MOTOR_GYRO_PID_MAX_IOUT 200.0f
 
 //DM4310 PID
 //MIT模式位置控制pid
@@ -104,6 +112,7 @@ typedef struct
 typedef enum{
     MOVE_FREE,
     MOVE_WORK,	//遥控器控制
+		MOVE_GYRO,	//陀螺仪控制
 		MOVE_NOD,		//点头
 		MOVE_SHAKE,	//摇头
 		MOVE_SCAN_ALL,//全方位扫描
@@ -141,12 +150,17 @@ typedef struct
 	//大疆电机pid参数
 	move_PID_t move_angle_pid;
 	move_PID_t move_lock_pid;
+	move_PID_t move_gyro_pid;
 	pid_type_def move_speed_pid;             
 	
 	//达妙电机MIT模式参数
 	float DM_target_torque;
 	float DM_kp;	
 	float DM_kd;		
+	
+	//gyro模式目标角度
+	fp32 gyro_angle;     //rad
+  fp32 gyro_angle_set; //rad
 	
 } move_motor_t;
 

@@ -42,7 +42,15 @@ static fp32 move_PID_calc(move_PID_t *pid, fp32 get, fp32 set, fp32 error_delta)
 fp32 pitch_k = -100.0f;
 fp32 pitch_add = 0.0f;
 fp32 filter_pitch_imu[40];
+fp32 filter_yaw_imu[40];
+fp32 filter_pitch_imu_gyro[40];
+fp32 filter_yaw_imu_gyro[40];
+
 fp32 filtered_avg_pitch_imu=0;
+fp32 filtered_avg_yaw_imu = 0;
+fp32 filtered_avg_yaw_imu_gyro = 0;
+fp32 filtered_avg_pitch_imu_gyro = 0;
+
 
 //串口数据记录变量
 volatile uint8_t buf_uart[10];
@@ -151,11 +159,25 @@ void move_task(void const *argument)
 			fn_move_feedback_update(); 
 			
 			//imu数据获取
-				filter_pitch_imu[cnt40] = INS_eulers[2];				
-				filtered_avg_pitch_imu = 0;				
-				for (int i = 0; i < 40; i++)
-            filtered_avg_pitch_imu += filter_pitch_imu[i];				
-				filtered_avg_pitch_imu = filtered_avg_pitch_imu / 40;
+			filtered_avg_pitch_imu = 0;
+			filtered_avg_yaw_imu = 0;
+			filtered_avg_yaw_imu_gyro = 0;
+		
+			filter_pitch_imu[cnt40] = INS_eulers[2];
+			filter_pitch_imu_gyro[cnt40] = INS_gyro[0];
+			filter_yaw_imu[cnt40] = INS_eulers[0];
+			filter_yaw_imu_gyro[cnt40] = INS_gyro[2];
+		
+			for (int i = 0; i < 40; i++)
+			{
+					filtered_avg_pitch_imu += filter_pitch_imu[i];
+					filtered_avg_yaw_imu += filter_yaw_imu[i];
+					filtered_avg_yaw_imu_gyro += filter_yaw_imu_gyro[i];
+			}
+			
+			filtered_avg_pitch_imu = filtered_avg_pitch_imu / 40;
+			filtered_avg_yaw_imu = filtered_avg_yaw_imu / 40;
+			filtered_avg_yaw_imu_gyro = filtered_avg_yaw_imu_gyro / 40;
 			
 			
 			// 计算头部电机电流
@@ -168,7 +190,7 @@ void move_task(void const *argument)
 			fn_ctrl_DM_motor(move_data.yaw_motor_data.motor_angle_set,0.0f,move_data.yaw_motor_data.DM_kp,move_data.yaw_motor_data.DM_kd,0.0f);
 
 			
-      vTaskDelay(5);		
+      vTaskDelay(1);		
 			move_data.last_move_mode = move_data.move_mode;
 			cnt40++;		
 				
@@ -206,7 +228,8 @@ void fn_move_motor_init(void)
 		// Pitch 2006初始化
 		init_ecd_record(&gimbal_motor2006_measure);
 		move_PID_init(&move_data.pit_motor_data.move_angle_pid, PIT_MOTOR_ANGLE_PID_MAX_OUT, PIT_MOTOR_ANGLE_PID_MAX_IOUT, PIT_MOTOR_ANGLE_PID_KP, PIT_MOTOR_ANGLE_PID_KI, PIT_MOTOR_ANGLE_PID_KD);
-		move_PID_init(&move_data.pit_motor_data.move_lock_pid, PIT_MOTOR_LOCK_PID_MAX_OUT, PIT_MOTOR_LOCK_PID_MAX_IOUT, PIT_MOTOR_LOCK_PID_KP, PIT_MOTOR_LOCK_PID_KI, PIT_MOTOR_LOCK_PID_KD);		
+		move_PID_init(&move_data.pit_motor_data.move_lock_pid, PIT_MOTOR_LOCK_PID_MAX_OUT, PIT_MOTOR_LOCK_PID_MAX_IOUT, PIT_MOTOR_LOCK_PID_KP, PIT_MOTOR_LOCK_PID_KI, PIT_MOTOR_LOCK_PID_KD);	
+		move_PID_init(&move_data.pit_motor_data.move_gyro_pid, PIT_MOTOR_GYRO_PID_MAX_OUT, PIT_MOTOR_GYRO_PID_MAX_IOUT, PIT_MOTOR_GYRO_PID_KP, PIT_MOTOR_GYRO_PID_KI, PIT_MOTOR_GYRO_PID_KD);
 		PID_init(&move_data.pit_motor_data.move_speed_pid, PID_POSITION, pit_speed_pid, PIT_MOTOR_SPEED_PID_MAX_OUT, PIT_MOTOR_SPEED_PID_MAX_IOUT);		
     fn_move_feedback_update();
 
@@ -232,6 +255,11 @@ void fn_moveMode(void)
 	else if(head_mode.head_mode == MODE_PIT_RST || head_mode.head_mode == MODE_SLAM)
 	{
 		move_data.move_mode = MOVE_WORK;		
+	}
+	//陀螺仪模式
+	else if(head_mode.head_mode == MODE_GYRO)
+	{
+		move_data.move_mode = MOVE_GYRO;		
 	}
 	//工作模式
 	else if(head_mode.head_mode == MODE_WORK)
@@ -307,6 +335,7 @@ void fn_moveMotorMode(void)
         move_data.move_motor_pit_mode = MOVE_MOTOR_DOWN;
     }	
 		
+		//工作模式
     if (move_data.move_mode == MOVE_WORK)
     {
         move_data.move_motor_yaw_mode = MOVE_MOTOR_ENCONDE;
@@ -318,6 +347,13 @@ void fn_moveMotorMode(void)
 					move_data.move_motor_pit_mode = MOVE_MOTOR_RST;					
 				}
 		}	
+		
+		//陀螺仪模式
+    if (move_data.move_mode == MOVE_GYRO)
+    {
+        move_data.move_motor_yaw_mode = MOVE_MOTOR_GYRO;
+        move_data.move_motor_pit_mode = MOVE_MOTOR_GYRO;
+    }		
 		
 		//点头，pitch电机进入扫描模式		
     if (move_data.move_mode == MOVE_NOD)
@@ -354,6 +390,7 @@ void fn_move_feedback_update(void)
 		move_data.pit_motor_data.motor_ecd = move_data.pit_motor_data.move_motor_measure->ecd;//更新电机ecd
 		move_data.pit_motor_data.motor_speed = move_data.pit_motor_data.move_motor_measure->speed_rpm;//更新电机转速
 		move_data.pit_motor_data.motor_angle = move_data.pit_motor_data.move_motor_measure->distance;	//更新Pitch绝对角度
+		move_data.pit_motor_data.gyro_angle = filtered_avg_pitch_imu/PI * 180.0f;	//更新Pitch陀螺仪角度	
 	
 		//DM数据
 		move_data.yaw_motor_data.motor_angle = move_data.yaw_motor_data.DM_motor_measure->position; //更新电机角度
@@ -377,6 +414,13 @@ void fn_move_mode_change_control_transit(void)
 			//设置pitch 2006当前角度为目标值
 			move_data.pit_motor_data.motor_angle_set = move_data.pit_motor_data.motor_angle;
 	}
+	
+	//进入陀螺仪模式，设定当前绝对角度为目标值
+	if(move_data.move_mode == MOVE_GYRO && move_data.last_move_mode != MOVE_GYRO)
+	{
+		move_data.yaw_motor_data.gyro_angle_set = move_data.yaw_motor_data.gyro_angle;
+		move_data.pit_motor_data.gyro_angle_set = move_data.pit_motor_data.gyro_angle;
+	}
 
 }
 // 计算头部电机电流
@@ -384,12 +428,12 @@ void fn_MoveControl(void)
 {
   /*****2006目标角度设置***********************/
 	
-	//down模式
+	//1  down模式
 	if(move_data.move_motor_pit_mode == MOVE_MOTOR_DOWN)	
 	
 			move_data.pit_motor_data.give_current = 0.0f;
 	
-	//复位模式
+	//2  复位模式
 	else if(move_data.move_motor_pit_mode == MOVE_MOTOR_RST)
 	{
 		if(rst_flag == 0)
@@ -434,7 +478,8 @@ void fn_MoveControl(void)
 			}
 		}
 	}
-	//遥控器控制模式
+	
+	//3  遥控器控制模式
 	else if(move_data.move_motor_pit_mode == MOVE_MOTOR_ENCONDE)	
 	{
 			move_data.pit_motor_data.motor_angle_set += ps2.joystick[1]*PS2_Coef_Pit;
@@ -457,7 +502,15 @@ void fn_MoveControl(void)
 			}
 
 	}
-	
+	//4  陀螺仪模式
+	else if(move_data.move_motor_pit_mode == MOVE_MOTOR_GYRO)
+	{
+			move_data.pit_motor_data.gyro_angle_set += ps2.joystick[1]*PS2_Coef_Pit*0.5;		
+			move_data.pit_motor_data.give_current = move_PID_calc(&move_data.pit_motor_data.move_gyro_pid, 
+																																		move_data.pit_motor_data.gyro_angle, 
+																																		move_data.pit_motor_data.gyro_angle_set, 
+																																		INS_gyro[0] /PI*180.0f);						
+	}
 	
 	/*****DM4310目标角度设置********************/
 	
@@ -564,12 +617,26 @@ void fn_MoveControl(void)
 			}
 		}
 	
-		//非down和非复位模式下，按目标角度解算pitch轴电流
-		if(move_data.move_motor_pit_mode != MOVE_MOTOR_DOWN && move_data.move_motor_pit_mode != MOVE_MOTOR_RST)
-			move_data.pit_motor_data.give_current = move_PID_calc(&move_data.pit_motor_data.move_angle_pid, 
+		//电机模式非down、非复位、非陀螺仪时，按目标角度解算pitch轴电流
+		if(move_data.move_motor_pit_mode != MOVE_MOTOR_DOWN && move_data.move_motor_pit_mode != MOVE_MOTOR_RST && move_data.move_motor_pit_mode != MOVE_MOTOR_GYRO)
+		{
+			//工作模式下，接近目标位置改用锁死pid
+			if(fabs(move_data.pit_motor_data.motor_angle_set - move_data.pit_motor_data.motor_angle) < 10.0f 
+				&& move_data.move_mode == MODE_WORK)
+			{
+				move_data.pit_motor_data.give_current = move_PID_calc(&move_data.pit_motor_data.move_lock_pid, 
 																																		move_data.pit_motor_data.move_motor_measure->distance, 
 																																		move_data.pit_motor_data.motor_angle_set, 
 																																		move_data.pit_motor_data.motor_speed);
+			}
+			//运动过程中使用普通角度pid
+			else
+				move_data.pit_motor_data.give_current = move_PID_calc(&move_data.pit_motor_data.move_angle_pid, 
+																																		move_data.pit_motor_data.move_motor_measure->distance, 
+																																		move_data.pit_motor_data.motor_angle_set, 
+																																		move_data.pit_motor_data.motor_speed);		
+		}
+
  
 
 }
