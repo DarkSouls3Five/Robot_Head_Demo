@@ -27,11 +27,24 @@ Project File Date:  11/06/2025
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'E:\MDK528\ARM\ARMCC\Bin'
 Build target 'air_force'
-compiling led_task.c...
+compiling move_task.c...
+..\application\move_task.c(222): warning:  #177-D: variable "DM_pid1"  was declared but never referenced
+  		const static fp32 DM_pid1[3] = {DM4310PosPid1_Yaw_kp,DM4310PosPid1_Yaw_ki,DM4310PosPid1_Yaw_kd};
+..\application\move_task.c(223): warning:  #177-D: variable "DM_pid2"  was declared but never referenced
+  		const static fp32 DM_pid2[3] = {DM4310PosPid2_Yaw_kp,DM4310PosPid2_Yaw_ki,DM4310PosPid2_Yaw_kd};		
+..\application\move_task.c(498): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			if(scan_t > 6*PI/0.03)
+..\application\move_task.c(508): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			move_data.pit_motor_data.gyro_angle_set += ps2.joystick[1]*PS2_Coef_Pit*0.5;		
+..\application\move_task.c(571): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			if(scan_t > 6*PI/0.02)
+..\application\move_task.c(601): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+  			if(scan_t > 4*PI/0.0025)
+..\application\move_task.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=60692 RO-data=1404 RW-data=440 ZI-data=20896  
+Program Size: Code=60656 RO-data=1400 RW-data=440 ZI-data=20896  
 FromELF: creating hex file...
-"air_force\air_force.axf" - 0 Error(s), 0 Warning(s).
+"air_force\air_force.axf" - 0 Error(s), 6 Warning(s).
 
 <h2>Software Packages used:</h2>
 

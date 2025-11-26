@@ -12,7 +12,7 @@
 
 //电机中值
 #define MID_YAW_ANGLE 2.17f
-#define MID_PIT_ANGLE -36.0f
+#define MID_PIT_ANGLE -40.0f
 
 //角度限幅
 #define MAX_YAW_ANGLE MID_YAW_ANGLE+1.4f
@@ -62,6 +62,7 @@
 //MIT模式位置控制pid
 #define DM4310_MIT_P_KP 2.5f
 #define DM4310_MIT_P_KD 1.5f
+#define DM4310_MIT_P_KI 1.5f
 
 //yaw轴角度双环外环
 #define DM4310PosPid1_Yaw_kp 0.6f

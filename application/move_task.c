@@ -77,39 +77,39 @@ void USART6_IRQHandler(void)
         huart6.Instance->DR;
 			
         // 判断是否收到"NOD"
-        if(q == 3 && 
-           buf_uart[0] == 'N' && 
-           buf_uart[1] == 'O' && 
-           buf_uart[2] == 'D')
+        if(
+           buf_uart[1] == 'N' && 
+           buf_uart[2] == 'O' && 
+           buf_uart[3] == 'D')
             mode_uart = 1;  // 设置模式标志位1
 
 				//判断是否收到"SHAKE"
-        else if(q == 5 && 
-           buf_uart[0] == 'S' && 
-           buf_uart[1] == 'H' && 
-           buf_uart[2] == 'A' &&
-					 buf_uart[3] == 'K' &&
-					 buf_uart[4] == 'E' 
+        else if(
+           buf_uart[1] == 'S' && 
+           buf_uart[2] == 'H' && 
+           buf_uart[3] == 'A' &&
+					 buf_uart[4] == 'K' &&
+					 buf_uart[5] == 'E' 
 				)
         {
             mode_uart = 2;  // 设置模式标志位2
         }	
 				//判断是否收到"SCAN"
-        else if(q == 4 && 
-           buf_uart[0] == 'S' && 
-           buf_uart[1] == 'C' && 
-           buf_uart[2] == 'A' &&
-					 buf_uart[3] == 'N' 
+        else if( 
+           buf_uart[1] == 'S' && 
+           buf_uart[2] == 'C' && 
+           buf_uart[3] == 'A' &&
+					 buf_uart[4] == 'N' 
 				)
         {
             mode_uart = 3;  // 设置模式标志位3
         }		
 				//判断是否收到"STOP"
-        else if(q == 4 && 
-           buf_uart[0] == 'S' && 
-           buf_uart[1] == 'T' && 
-           buf_uart[2] == 'O' &&
-					 buf_uart[3] == 'P' 
+        else if(
+           buf_uart[1] == 'S' && 
+           buf_uart[2] == 'T' && 
+           buf_uart[3] == 'O' &&
+					 buf_uart[4] == 'P' 
 				)
         {
             mode_uart = 4;  // 设置模式标志位4
@@ -190,7 +190,7 @@ void move_task(void const *argument)
 			fn_ctrl_DM_motor(move_data.yaw_motor_data.motor_angle_set,0.0f,move_data.yaw_motor_data.DM_kp,move_data.yaw_motor_data.DM_kd,0.0f);
 
 			
-      vTaskDelay(1);		
+      vTaskDelay(5);		
 			move_data.last_move_mode = move_data.move_mode;
 			cnt40++;		
 				
@@ -613,7 +613,7 @@ void fn_MoveControl(void)
 			if(ps2.button[1] == 1)
 			{
 				move_data.yaw_motor_data.motor_angle_set = MID_YAW_ANGLE;
-				move_data.pit_motor_data.motor_angle_set = MID_PIT_ANGLE;			
+				move_data.pit_motor_data.motor_angle_set = -25.0f;			
 			}
 		}
 	
